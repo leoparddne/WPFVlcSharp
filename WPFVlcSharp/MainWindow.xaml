@@ -5,74 +5,78 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFVlcSharp"
         xmlns:uc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
-        mc:Ignorable="d" WindowStyle="None" AllowsTransparency="True" BorderBrush="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        mc:Ignorable="d" ResizeMode="NoResize" BorderBrush="Transparent" 
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" Background="White"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <DockPanel>
-            <Grid DockPanel.Dock="Bottom" Name="gridBottom">
-                <StackPanel>
-                    <Slider x:Name="sliderProgress" HorizontalAlignment="Stretch" 
+        <WindowChrome.WindowChrome>
+            <WindowChrome GlassFrameThickness="-1"   CaptionHeight="0"   />
+        </WindowChrome.WindowChrome   >
+        <Grid>
+            <DockPanel>
+                <Grid DockPanel.Dock="Bottom" Name="gridBottom">
+                    <StackPanel>
+                        <Slider x:Name="sliderProgress" HorizontalAlignment="Stretch" 
                             PreviewMouseDown="sliderProgress_PreviewMouseDown" PreviewMouseUp="sliderProgress_PreviewMouseUp" 
                             PreviewMouseMove="sliderProgress_PreviewMouseMove"
                             ValueChanged="sliderProgress_ValueChanged" />
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
                         <Grid>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="播放" Name="btnPlay" Click="btnPlay_Click"/>
-                                <Button Content="暂停" Name="btnPause" Click="btnPause_Click" Visibility="Collapsed"/>
-                            </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="播放" Name="btnPlay" Click="btnPlay_Click"/>
+                                    <Button Content="暂停" Name="btnPause" Click="btnPause_Click" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Name="txtDuringTime"/>
+                                    <TextBlock Text=" / "/>
+                                    <TextBlock Name="txtTotalTime"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="静音" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Name="btnMute" Click="btnMute_Click" />
+                                    <Button Content="恢复声音" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Name="btnReMute" Click="btnReMute_Click" Visibility="Collapsed"/>
+                                    <Button Content="全屏" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="btnFullScreen_Click" />
+                                </StackPanel>
+                            </Grid>
                         </Grid>
-                        <Grid Grid.Column="1">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Name="txtDuringTime"/>
-                                <TextBlock Text=" / "/>
-                                <TextBlock Name="txtTotalTime"/>
-                            </StackPanel>
-                        </Grid>
-                        <Grid Grid.Column="2">
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="静音" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Name="btnMute" Click="btnMute_Click" />
-                                <Button Content="恢复声音" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Name="btnReMute" Click="btnReMute_Click" Visibility="Collapsed"/>
-                                <Button Content="全屏" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Click="btnFullScreen_Click" />
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
                         <Grid>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Name="txtFileName"/>
-                            </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Name="txtFileName"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <StackPanel Orientation="Horizontal">
+                                </StackPanel>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="切换视频" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                                    <Button Content="关闭" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Name="btnClose" Click="btnClose_Click" />
+                                </StackPanel>
+                            </Grid>
                         </Grid>
-                        <Grid Grid.Column="1">
-                            <StackPanel Orientation="Horizontal">
-                            </StackPanel>
-                        </Grid>
-                        <Grid Grid.Column="2">
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="切换视频" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                                <Button Content="关闭" Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top" Name="btnClose" Click="btnClose_Click" />
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                    <Button Content="Play"  Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top"  Click="Button_Click" />
-                </StackPanel>
-            </Grid>
-            <Grid Name="gridVideoContainer">
-                <!--<WindowsFormsHost x:Name="PART_PlayerHost" Background="#131A1D">
+                        <Button Content="Play"  Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top"  Click="Button_Click" />
+                    </StackPanel>
+                </Grid>
+                <Grid Name="gridVideoContainer">
+                    <!--<WindowsFormsHost x:Name="PART_PlayerHost" Background="#131A1D">
                 </WindowsFormsHost>-->
 
-                <uc:VideoView x:Name="videoViewControl" >
-                    <Button  Background="#01000000" BorderBrush="Transparent"
+                    <uc:VideoView x:Name="videoViewControl" >
+                        <Button  Background="#01000000" BorderBrush="Transparent"
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                             Width="{Binding ActualWidth, ElementName=gridVideoContainer}" 
                             Height="{Binding ActualHeight, ElementName=gridVideoContainer}"
@@ -82,11 +86,11 @@
                              PreviewMouseLeftButtonDown="btnVideoCover_MouseLeftButtonDown"
                              KeyDown="btnVideoCover_KeyDown"
                             />
-                    <!--<Grid KeyDown="videoViewControl_KeyDown" MouseDown="videoViewControl_MouseLeftButtonDown">
+                        <!--<Grid KeyDown="videoViewControl_KeyDown" MouseDown="videoViewControl_MouseLeftButtonDown">
                         
                     </Grid>-->
-                </uc:VideoView>
-            </Grid>
-        </DockPanel>
-    </Grid>
-</Window>
+                    </uc:VideoView>
+                </Grid>
+            </DockPanel>
+        </Grid>
+    </Window>
