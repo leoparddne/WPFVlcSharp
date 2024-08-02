@@ -3,6 +3,8 @@
 #### 介绍
 使用VLCSharp编写的接触播放器界面
 
+测试代码时记得调整测试视频的路径(默认为string url = "C:\\Users\\ives\\Desktop\\zhaohuo.mp4")
+
 ![界面效果](mainwindow-1.png)
 
 #### 软件架构
