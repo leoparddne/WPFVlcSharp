@@ -67,15 +67,15 @@
                     <Button Content="Play"  Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Top"  Click="Button_Click" />
                 </StackPanel>
             </Grid>
-            <Grid Name="gridVideo">
+            <Grid Name="gridVideoContainer">
                 <!--<WindowsFormsHost x:Name="PART_PlayerHost" Background="#131A1D">
                 </WindowsFormsHost>-->
 
                 <uc:VideoView x:Name="videoViewControl" >
                     <Button  Background="#01000000" BorderBrush="Transparent"
                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                            Width="{Binding Width, ElementName=gridVideo}" 
-                            Height="{Binding ActualHeight, ElementName=gridVideo}"
+                            Width="{Binding ActualWidth, ElementName=gridVideoContainer}" 
+                            Height="{Binding ActualHeight, ElementName=gridVideoContainer}"
                              Name="btnVideoCover" 
                              Click="btnVideoCover_Click" 
                              MouseMove="btnVideoCover_MouseMove"
