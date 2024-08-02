@@ -362,6 +362,16 @@ namespace WPFVlcSharp
             //判断是否点击鼠标左键
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
+                //如果是全屏或者播放中则不允许拖动
+                if (videoViewControl.MediaPlayer != null)
+                {
+                    if (videoViewControl.MediaPlayer.AudioTrack != -1 || videoViewControl.MediaPlayer.VideoTrack != -1 || 
+                        videoViewControl.MediaPlayer.IsPlaying || videoViewControl.MediaPlayer.Fullscreen)
+                    {
+                        return;
+                    }
+                }
+
                 this.DragMove();
             }
         }
