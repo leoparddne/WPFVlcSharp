@@ -62,13 +62,14 @@ namespace WPFVlcSharp
                 videoViewControl.MediaPlayer.AudioTrack == -1)
             {
                 //获取播放位置是否已经结束,如果结束了讲进度条设置为最大值
-                if (videoViewControl.MediaPlayer.Time >= videoViewControl.MediaPlayer.Length && videoViewControl.MediaPlayer.Time != 0 && videoViewControl.MediaPlayer.Length != 0)
-                {
-                    Trace.WriteLine($"播放结束-{videoViewControl.MediaPlayer.Time}-{videoViewControl.MediaPlayer.Length}");
-                    sliderProgress.Value = sliderProgress.Maximum;
-                    timer.Stop();
-                    return;
-                }
+                //if (videoViewControl.MediaPlayer.Time >= videoViewControl.MediaPlayer.Length && videoViewControl.MediaPlayer.Time != 0 && videoViewControl.MediaPlayer.Length != 0)
+                //{
+                Trace.WriteLine($"播放结束-{videoViewControl.MediaPlayer.Time}-{videoViewControl.MediaPlayer.Length}");
+                sliderProgress.Value = sliderProgress.Maximum;
+                PauseVideo();
+                timer.Stop();
+                return;
+                //}
             }
 
             //获取当前播放时间和总时间
@@ -365,7 +366,7 @@ namespace WPFVlcSharp
                 //如果是全屏或者播放中则不允许拖动
                 if (videoViewControl.MediaPlayer != null)
                 {
-                    if (videoViewControl.MediaPlayer.AudioTrack != -1 || videoViewControl.MediaPlayer.VideoTrack != -1 || 
+                    if (videoViewControl.MediaPlayer.AudioTrack != -1 || videoViewControl.MediaPlayer.VideoTrack != -1 ||
                         videoViewControl.MediaPlayer.IsPlaying || videoViewControl.MediaPlayer.Fullscreen)
                     {
                         return;
