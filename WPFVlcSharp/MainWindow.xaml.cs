@@ -109,6 +109,19 @@ namespace WPFVlcSharp
             {
                 return;
             }
+
+            if (videoViewControl.MediaPlayer.Position == 0 || videoViewControl.MediaPlayer.Position == -1 ||
+                videoViewControl.MediaPlayer.AudioTrack == -1 || videoViewControl.MediaPlayer.VideoTrack == -1)
+            {
+                string url = "C:\\Users\\ives\\Desktop\\zhaohuo.mp4";
+                using (LibVLCSharp.Shared.Media media = new Media(_libvlc, new Uri(url)))
+                {
+                    var dir = media.Duration;
+                    videoViewControl.MediaPlayer.Media = media;
+                    //videoViewControl.MediaPlayer.Play(media);
+                }
+            }
+
             PlayVideo();
         }
 
