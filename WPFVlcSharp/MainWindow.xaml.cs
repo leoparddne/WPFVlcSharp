@@ -220,6 +220,27 @@ namespace WPFVlcSharp
         {
             sliderProgress.ReleaseMouseCapture();
             isMouseVideo = false;
+            if (videoViewControl.MediaPlayer == null)
+            {
+                return;
+            }
+
+            //Trace.WriteLine("up");
+            if (videoViewControl.MediaPlayer.Position == 0 || videoViewControl.MediaPlayer.Position == -1 ||
+                videoViewControl.MediaPlayer.AudioTrack == -1 || videoViewControl.MediaPlayer.VideoTrack == -1)
+            {
+
+                //string url = "rtsp://user:password@192.168.1.120:554/ch1/main/av_stream";
+                string url = "C:\\Users\\ives\\Desktop\\zhaohuo.mp4";
+                using (LibVLCSharp.Shared.Media media = new Media(_libvlc, new Uri(url)))
+                {
+                    var dir = media.Duration;
+                    videoViewControl.MediaPlayer.Media = media;
+                    //videoViewControl.MediaPlayer.Play(media);
+                }
+            }
+
+
 
             Trace.WriteLine("up");
             PlayVideo();
