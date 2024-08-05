@@ -1,4 +1,4 @@
-﻿<Window x:Class="WPFVlcSharp.MainWindow"
+<Window x:Class="WPFVlcSharp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,9 +16,8 @@
                 <Grid DockPanel.Dock="Bottom" Name="gridBottom">
                     <StackPanel>
                         <Slider x:Name="sliderProgress" HorizontalAlignment="Stretch" 
-                            PreviewMouseDown="sliderProgress_PreviewMouseDown" PreviewMouseUp="sliderProgress_PreviewMouseUp" 
-                            PreviewMouseMove="sliderProgress_PreviewMouseMove"
-                            ValueChanged="sliderProgress_ValueChanged" />
+                       
+                            ValueChanged="sliderProgress_ValueChanged"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />

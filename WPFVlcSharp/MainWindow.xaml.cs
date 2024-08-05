@@ -1,4 +1,4 @@
-﻿using LibVLCSharp.Shared;
+using LibVLCSharp.Shared;
 using System;
 using System.Diagnostics;
 using System.Timers;
@@ -16,6 +16,8 @@ namespace WPFVlcSharp
 
 
         Timer timer;
+
+        string videoPath = "C:\\Users\\ivesBao\\Desktop\\zhaohuo.mp4";
 
         public MainWindow()
         {
@@ -56,21 +58,37 @@ namespace WPFVlcSharp
                 timer.Stop();
                 return;
             }
-            //Trace.WriteLine(videoViewControl.MediaPlayer.AudioTrack);
+            ////Trace.WriteLine(videoViewControl.MediaPlayer.AudioTrack);
+            //if (!videoViewControl.MediaPlayer.IsPlaying &&
+            //    videoViewControl.MediaPlayer.VideoTrack == -1 &&
+            //    videoViewControl.MediaPlayer.AudioTrack == -1)
+            //{
+            //    //获取播放位置是否已经结束,如果结束了讲进度条设置为最大值
+            //    //if (videoViewControl.MediaPlayer.Time >= videoViewControl.MediaPlayer.Length && videoViewControl.MediaPlayer.Time != 0 && videoViewControl.MediaPlayer.Length != 0)
+            //    //{
+            //    Trace.WriteLine($"播放结束-{videoViewControl.MediaPlayer.Time}-{videoViewControl.MediaPlayer.Length}");
+            //    sliderProgress.Value = sliderProgress.Maximum;
+            //    PauseVideo();
+            //    timer.Stop();
+            //    return;
+            //    //}
+            //}
+
+            //if (videoViewControl.MediaPlayer.State == LibVLCSharp.Shared.MediaPlayerState.Ended)
             if (!videoViewControl.MediaPlayer.IsPlaying &&
                 videoViewControl.MediaPlayer.VideoTrack == -1 &&
                 videoViewControl.MediaPlayer.AudioTrack == -1)
             {
-                //获取播放位置是否已经结束,如果结束了讲进度条设置为最大值
-                //if (videoViewControl.MediaPlayer.Time >= videoViewControl.MediaPlayer.Length && videoViewControl.MediaPlayer.Time != 0 && videoViewControl.MediaPlayer.Length != 0)
-                //{
-                Trace.WriteLine($"播放结束-{videoViewControl.MediaPlayer.Time}-{videoViewControl.MediaPlayer.Length}");
-                sliderProgress.Value = sliderProgress.Maximum;
-                PauseVideo();
-                timer.Stop();
-                return;
-                //}
+                if (videoViewControl.MediaPlayer.State == VLCState.Ended)
+                {
+                    Trace.WriteLine($"播放结束-{videoViewControl.MediaPlayer.Time}-{videoViewControl.MediaPlayer.Length}");
+                    sliderProgress.Value = sliderProgress.Maximum;
+                    PauseVideo();
+                    timer.Stop();
+                    return;
+                }
             }
+
 
             //获取当前播放时间和总时间
             var time = (double)videoViewControl.MediaPlayer.Time / 1000;
@@ -78,22 +96,27 @@ namespace WPFVlcSharp
             var timeSpan = new TimeSpan(0, 0, (int)time);
             var lengthSpan = new TimeSpan(0, 0, (int)length);
 
-            //获取当前播放文件名
-            //var fileName = videoViewControl.MediaPlayer.Media.Tracks[0].Meta["filename"];
+            //Application.Current.Dispatcher.Invoke(() =>
+            //{
             txtDuringTime.Text = timeSpan.ToString(@"hh\:mm\:ss");
             txtTotalTime.Text = lengthSpan.ToString(@"hh\:mm\:ss");
 
 
-            //设置进度条
+            ////设置进度条
+            if (sliderProgress.Maximum != videoViewControl.MediaPlayer.Length)
+            {
+                sliderProgress.Maximum = videoViewControl.MediaPlayer.Length;
+            }
             sliderProgress.Value = videoViewControl.MediaPlayer.Time;
-            sliderProgress.Maximum = videoViewControl.MediaPlayer.Length;
+
+            //});
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
             //string url = "rtsp://user:password@192.168.1.120:554/ch1/main/av_stream";
-            string url = "C:\\Users\\ives\\Desktop\\zhaohuo.mp4";
+            string url = videoPath;
             using (LibVLCSharp.Shared.Media media = new Media(_libvlc, new Uri(url)))
             {
                 var dir = media.Duration;
@@ -113,7 +136,7 @@ namespace WPFVlcSharp
             if (videoViewControl.MediaPlayer.Position == 0 || videoViewControl.MediaPlayer.Position == -1 ||
                 videoViewControl.MediaPlayer.AudioTrack == -1 || videoViewControl.MediaPlayer.VideoTrack == -1)
             {
-                string url = "C:\\Users\\ives\\Desktop\\zhaohuo.mp4";
+                string url = videoPath;
                 using (LibVLCSharp.Shared.Media media = new Media(_libvlc, new Uri(url)))
                 {
                     var dir = media.Duration;
@@ -174,80 +197,23 @@ namespace WPFVlcSharp
             }
         }
 
-        private void sliderProgress_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            sliderProgress.CaptureMouse();
-            Trace.WriteLine("down");
-            isMouseVideo = true;
-
-            //计算进度位置
-            var pos = e.MouseDevice.GetPosition(sliderProgress);
-            var value = (pos.X / sliderProgress.ActualWidth) * sliderProgress.Maximum;
-            sliderProgress.Value = value;
-            videoViewControl.MediaPlayer.Time = (int)value;
-
-            //设置进度条
-            sliderProgress.Value = videoViewControl.MediaPlayer.Time;
-            sliderProgress.Maximum = videoViewControl.MediaPlayer.Length;
-
-            PauseVideo();
-        }
-
-
-
-
-        private void sliderProgress_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if (!isMouseVideo)
-            {
-                return;
-            }
-
-            Trace.WriteLine("move");
-
-            //计算进度位置
-            var pos = e.MouseDevice.GetPosition(sliderProgress);
-            var value = (pos.X / sliderProgress.ActualWidth) * sliderProgress.Maximum;
-            sliderProgress.Value = value;
-            videoViewControl.MediaPlayer.Time = (int)value;
-
-            //设置进度条
-            sliderProgress.Value = videoViewControl.MediaPlayer.Time;
-            sliderProgress.Maximum = videoViewControl.MediaPlayer.Length;
-        }
-
-        private void sliderProgress_PreviewMouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            sliderProgress.ReleaseMouseCapture();
-            isMouseVideo = false;
-            if (videoViewControl.MediaPlayer == null)
-            {
-                return;
-            }
-
-            //Trace.WriteLine("up");
-            if (videoViewControl.MediaPlayer.Position == 0 || videoViewControl.MediaPlayer.Position == -1 ||
-                videoViewControl.MediaPlayer.AudioTrack == -1 || videoViewControl.MediaPlayer.VideoTrack == -1)
-            {
-
-                //string url = "rtsp://user:password@192.168.1.120:554/ch1/main/av_stream";
-                string url = "C:\\Users\\ives\\Desktop\\zhaohuo.mp4";
-                using (LibVLCSharp.Shared.Media media = new Media(_libvlc, new Uri(url)))
-                {
-                    var dir = media.Duration;
-                    videoViewControl.MediaPlayer.Media = media;
-                    //videoViewControl.MediaPlayer.Play(media);
-                }
-            }
-
-
-
-            Trace.WriteLine("up");
-            PlayVideo();
-        }
-
         private void sliderProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (videoViewControl.MediaPlayer == null || sender == null)
+            {
+                return;
+            }
+
+            if (e.NewValue == videoViewControl.MediaPlayer.Time)
+            {
+                return;
+            }
+
+            //e.NewValue
+            //设置进度条
+            //videoViewControl.MediaPlayer.Time = (long)sliderProgress.Value;
+            videoViewControl.MediaPlayer.Time = (long)e.NewValue;
+            //sliderProgress.Maximum = videoViewControl.MediaPlayer.Length;
         }
 
         private void btnFullScreen_Click(object sender, RoutedEventArgs e)
@@ -317,11 +283,14 @@ namespace WPFVlcSharp
                 return;
             }
 
-            //已经播放完毕(视频结束不再有暂停、播放)
-            if (videoViewControl.MediaPlayer.VideoTrack == -1 &&
-                videoViewControl.MediaPlayer.AudioTrack == -1)
+            //已经播放完毕,重播
+            if (videoViewControl.MediaPlayer.State == VLCState.Ended)
             {
-                return;
+                using (LibVLCSharp.Shared.Media media = new Media(_libvlc, new Uri(videoPath)))
+                {
+                    var dir = media.Duration;
+                    videoViewControl.MediaPlayer.Media = media;
+                }
             }
             PlayOrPause();
         }
@@ -400,6 +369,7 @@ namespace WPFVlcSharp
                 //如果是全屏或者播放中则不允许拖动
                 if (videoViewControl.MediaPlayer != null)
                 {
+                    //播放中禁止拖动
                     if (videoViewControl.MediaPlayer.AudioTrack != -1 || videoViewControl.MediaPlayer.VideoTrack != -1 ||
                         videoViewControl.MediaPlayer.IsPlaying || videoViewControl.MediaPlayer.Fullscreen)
                     {
