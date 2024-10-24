@@ -8,9 +8,9 @@
         mc:Ignorable="d" ResizeMode="NoResize" BorderBrush="Transparent" 
         MouseLeftButtonDown="Window_MouseLeftButtonDown" Background="White"
         Title="MainWindow" Height="450" Width="800">
-        <WindowChrome.WindowChrome>
+        <!-- <WindowChrome.WindowChrome>
             <WindowChrome GlassFrameThickness="-1"   CaptionHeight="0"   />
-        </WindowChrome.WindowChrome   >
+        </WindowChrome.WindowChrome   > -->
         <Grid>
             <DockPanel>
                 <Grid DockPanel.Dock="Bottom" Name="gridBottom">
